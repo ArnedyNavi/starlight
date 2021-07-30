@@ -10,23 +10,54 @@
 {% endblock %}
 
 {% block main %}
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fdefe3;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">
             <img src="/static/images/Logo.png" height="30" class="d-inline-block align-top" alt="">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <a class="nav-item nav-link active" href="#">Dashboard <span class="sr-only">(current)</span></a>
               <a class="nav-item nav-link" href="#">Progress</a>
-              <a class="nav-item nav-link" href="#">Features</a>
+              <a class="nav-item nav-link" href="#">Account</a>
             </div>
+            <div class="sign-out my-2 my-lg-0"><a href="/logout">Log Out</a></div>
         </div>
     </nav>
     <div class="container">
-
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="heading-content">
+                    Your Progress
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-inline-flex flex-lg-row align-items-top">
+                <div class="card card-progress" style="width: 18rem;">
+                    <img class="card-img-top" src="/static/images/hsk-1.png" alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title"><a href="/learn"> HSK 1 </a></h5>
+                      <p class="card-text">Learn simple words and phrases. Beginner lesson</p>
+                    </div>
+                    <div class="card-body">
+                      Your Progress: <>
+                    </div>
+                </div>
+                <div class="card card-progress" style="width: 18rem;">
+                    <img class="card-img-top" src="/static/images/hsk-2.png" alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title">HSK 2</h5>
+                      <p class="card-text">Learn communicate simply and directly on daily topics you are familiar with in Chinese.</p>
+                    </div>
+                    <div class="card-body">
+                        Your Progress: <>
+                    </div>
+                </div>
+            </div>
+        </div>
     </di>
 {% endblock %}
 

@@ -1,0 +1,33 @@
+.sign-out {
+    border: 2px solid #fd956b;
+    border-radius: 7px;
+    height: 35px;
+    width: 80px;
+    padding: 3px;
+    text-align: center;
+}
+
+.sign-out a{
+    color: #fd956b;
+    font-weight: 600;
+}
+
+.sign-out:hover {
+    background-color: #fd956b;
+}
+.sign-out:hover a{
+    color: white;
+    text-decoration: none;
+}
+
+.container {
+    padding: 2%;
+}
+.heading-content {
+    font-family: 'Gilroy-Bold';
+    font-size: 20px;
+}
+
+.card-progress {
+    margin: 5px;
+}

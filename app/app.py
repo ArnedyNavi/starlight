@@ -112,3 +112,8 @@ def home():
     username = session["username"]
 
     return render_template("home.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
