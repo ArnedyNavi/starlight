@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, session
 from functools import wraps
-from model import *
+from .model import *
 from datetime import datetime
 
 def login_required(f):
