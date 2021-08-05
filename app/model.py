@@ -22,3 +22,35 @@ class UserModel(db.Model):
         self.email = email
         self.grade = grade
         self.password = password
+
+class DeckModel(db.Model):
+    __tablename__ = 'decks'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String())
+    desc = db.Column(db.String())
+    total_words = db.Column(db.Integer())
+    banner = db.Column(db.Integer())
+    database_id = db.Column(db.String())
+
+    def __init__(self, name, desc, total_words, banner, database_id):
+        self.name = name
+        self.desc = desc
+        self.total_words = total_words
+        self.banner = banner
+        self.db_id = database_id
+
+class WordsModel(db.Model):
+    __tablename__ = 'words'
+
+    id = db.Column(db.Integer, primary_key=True)
+    database_id = db.Column(db.String())
+    hanzi = db.Column(db.String())
+    pinyin = db.Column(db.String())
+    meaning = db.Column(db.String())
+
+    def __init__(self, database_id, hanzi, pinyin, meaning):
+        self.database_id = database_id
+        self.hanzi = hanzi
+        self.pinyin = pinyin
+        self.meaning = meaning

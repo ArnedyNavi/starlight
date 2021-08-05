@@ -1,0 +1,147 @@
+{% extends "layout_new.html" %} 
+
+{% block head %}
+    <script src="/static/js/admin.js"></script>
+    <link href="/static/css/admin.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block title %}
+    : Decks
+{% endblock %}
+
+{% block nav %}
+<div class="sidebar-wide">
+    <div class="d-flex flex-column text-white bg-dark sidebar">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <img class="logo" src="/static/images/favicon.ico" width=40px"></img>
+          <span class="fs-4">星光学</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/admin" class="nav-link text-white" aria-current="page">
+                    <i class="fa fa-home icon-sidebar"></i>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard" class="nav-link text-white">
+                    <i class="fa fa-tachometer-alt icon-sidebar"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/decks" class="nav-link text-white active">
+                    <i class="fa fa-box icon-sidebar"></i>
+                    Decks
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link text-white">
+                    <i class="fa fa-user-cog icon-sidebar"></i>
+                    Manage
+                </a>
+            </li>
+        </ul>
+        <hr>
+    
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="/static/images/user.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong>{{ name }}</strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+          </ul>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar-small">
+    <div class="d-flex flex-column text-white bg-dark sidebar">
+        <a href="/" class="d-flex align-items-center mb-0 mt-1 mx-2 mtext-white text-decoration-none">
+          <img class="logo" src="/static/images/favicon.ico" width=40px"></img>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto px-1">
+            <li class="nav-small">
+                <a href="/admin" class="nav-link text-white" aria-current="page">
+                    <i class="fa fa-home icon-sidebar"></i>
+                </a>
+            </li>
+            <li class="nav-small">
+                <a href="/dashboard" class="nav-link text-white">
+                    <i class="fa fa-tachometer-alt icon-sidebar"></i>
+                </a>
+            </li>
+            <li class="nav-small">
+                <a href="/decks" class="nav-link active text-white">
+                    <i class="fa fa-box icon-sidebar"></i>
+                </a>
+            </li>
+            <li class="nav-small">
+                <a href="#" class="nav-link text-white">
+                    <i class="fa fa-user-cog icon-sidebar"></i>
+                </a>
+            </li>
+        </ul>
+        <hr>
+    
+        <div class="dropdown">
+            <a href="/profile" class="d-flex flex-column align-items-center text-white text-decoration-none">
+                <img src="/static/images/user.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            </a>
+            <a href="/logout" class="d-flex flex-column align-items-center my-4 icon-logout">
+                <i class="fa fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block main %} 
+<div class="content">
+    <div class="row my-4 align-items-center">
+        <div class="col-9 ">
+            <div class="search-bar align-items-center">
+                <form class="form-search" action="#" method="POST">
+                    <input class="input-search" type="text">
+                    <button class="search-button" type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="row">
+                <div class="col-6 action-button align-items-center">
+                    <a href="/decks/add" class="text-decoration-none text-white" ><i class="fa fa-plus"></i></a>
+                </div>
+                <div class="col-6 action-button align-items-center">
+                    <a href="/import" class="text-decoration-none text-white" ><i class="fa fa-upload"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4">
+    {% for deck in decks %}
+    <div class="col mb-4">
+        <div class="card card-progress ml-2 h-100">
+            <img class="card-img-top" src="/static/images/{{ deck.banner }}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a class="hsk-1-text text-primary font-weight-bold text-decoration-none" href="/decks/edit/{{deck.database_id}}"> {{ deck.name }} <i class="edit-button fa fa-edit"></i></a>
+                </h5>
+              <p class="card-text"> {{ deck.desc }}</p>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Total Words : {{ deck.total_words }}</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

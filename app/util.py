@@ -15,3 +15,17 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("username") != "admin" :
+            return redirect("/error")
+        return f(*args, **kwargs)
+    return decorated_function
+
+def open_csv():
+    return 0
+
+def insert_deck():
+    return 0

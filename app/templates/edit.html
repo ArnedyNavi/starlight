@@ -1,0 +1,307 @@
+{% extends "layout_new.html" %} 
+
+{% block head %}
+    <script src="/static/js/admin.js"></script>
+    <script src="/static/js/edit.js"></script>
+    <link href="/static/css/admin.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block title %}
+    : Decks
+{% endblock %}
+
+{% block nav %}
+<div class="sidebar-wide">
+    <div class="d-flex flex-column text-white bg-dark sidebar">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <img class="logo" src="/static/images/favicon.ico" width=40px"></img>
+          <span class="fs-4">星光学</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/admin" class="nav-link text-white" aria-current="page">
+                    <i class="fa fa-home icon-sidebar"></i>
+                    Home
+                </a>
+            </li>
+            <li>
+                <a href="/dashboard" class="nav-link text-white">
+                    <i class="fa fa-tachometer-alt icon-sidebar"></i>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/decks" class="nav-link text-white active">
+                    <i class="fa fa-box icon-sidebar"></i>
+                    Decks
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link text-white">
+                    <i class="fa fa-user-cog icon-sidebar"></i>
+                    Manage
+                </a>
+            </li>
+        </ul>
+        <hr>
+    
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="/static/images/user.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            <strong>{{ name }}</strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+            <li><a class="dropdown-item" href="/profile">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/logout">Sign out</a></li>
+          </ul>
+        </div>
+    </div>
+</div>
+
+<div class="sidebar-small">
+    <div class="d-flex flex-column text-white bg-dark sidebar">
+        <a href="/" class="d-flex align-items-center mb-0 mt-1 mx-2 mtext-white text-decoration-none">
+          <img class="logo" src="/static/images/favicon.ico" width=40px"></img>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto px-1">
+            <li class="nav-small">
+                <a href="/admin" class="nav-link text-white" aria-current="page">
+                    <i class="fa fa-home icon-sidebar"></i>
+                </a>
+            </li>
+            <li class="nav-small">
+                <a href="/dashboard" class="nav-link text-white">
+                    <i class="fa fa-tachometer-alt icon-sidebar"></i>
+                </a>
+            </li>
+            <li class="nav-small">
+                <a href="/decks" class="nav-link active text-white">
+                    <i class="fa fa-box icon-sidebar"></i>
+                </a>
+            </li>
+            <li class="nav-small">
+                <a href="#" class="nav-link text-white">
+                    <i class="fa fa-user-cog icon-sidebar"></i>
+                </a>
+            </li>
+        </ul>
+        <hr>
+    
+        <div class="dropdown">
+            <a href="/profile" class="d-flex flex-column align-items-center text-white text-decoration-none">
+                <img src="/static/images/user.png" alt="" width="32" height="32" class="rounded-circle me-2">
+            </a>
+            <a href="/logout" class="d-flex flex-column align-items-center my-4 icon-logout">
+                <i class="fa fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block main %} 
+<div class="content">
+    <div class="row my-2">
+        <div class="col-6">
+            <h3 class="h3">
+                <strong>{{ db_deck.name}} </strong>
+            </h3>
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary button-add" onclick="openPopUpAdd()">
+                <i class="fa fa-plus add-icon text-white"><span style="font-family: 'Qanelas';"> Add New</span></i>
+            </button>
+        </div>
+    </div>
+    <div class="popup_add" id="popup_add">
+        <div class="modal-content ">
+            <div class="modal-title">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <h5 class="h5"><strong>Add Data</strong></h5>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-link modal-exit text-dark" onclick="closePopUpAdd()">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr class="title-line">
+            <form action="/decks/add/{{db_deck.database_id}}" method="POST">
+            <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="hanzi">汉字</span>
+                        <input type="text" class="form-control" placeholder="Hanzi" aria-label="Hanzi" aria-describedby="hanzi" id="edit-hanzi" name="hanzi">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="pinyin">拼音</span>
+                        <input type="text" class="form-control" placeholder="Pinyin" aria-label="Pinyin" aria-describedby="pinyin" id="edit-pinyin" name="pinyin">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="meaning">意思</span>
+                        <input type="text" class="form-control" placeholder="Meaning" aria-label="Meaning" aria-describedby="meaning" id="edit-meaning" name="meaning">
+                    </div>
+                    <div class="input-group">
+                        <input type="hidden" class="form-control" value=" {{db_deck.database_id}}" name="db_id">
+                    </div>
+                    <div class="input-group">
+                        <input type="hidden" class="form-control" id="edit-id" name="data_id">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8 table-responsive-md ">
+            <table class="table table-sm table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <td>No</td>
+                        <td>Hanzi</td>
+                        <td>Pinyin</td>
+                        <td>Meaning</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in range(deck|length) %}
+                    <tr>
+                        {% set n = i + 1 %}
+                        <td>{{n}}<input type="hidden" value='{{deck[i]["id"]}}' id="id-{{n}}"></td>
+                        <td id="hanzi-{{n}}">{{deck[i]["hanzi"]}}</td>
+                        <td id="pinyin-{{n}}">{{deck[i]["pinyin"]}}</td>
+                        <td id="meaning-{{n}}">{{deck[i]["meaning"]}}</td>
+                        <td class="center-td" width="70px">
+                            <button class="btn btn-success button-table" id="{{n}}" onclick="openPopUp(this.id)">
+                                <i class="fa fa-edit edit-icon"></i>
+                            </button>
+                            
+                            <button class="btn btn-danger button-table" id="{{deck[i]['id']}}" onclick="confirmPopUp(this.id)">
+                                <i class="fa fa-trash edit-icon"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="popup_edit" id="popup_edit">
+            <div class="modal-content ">
+                <div class="modal-title">
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <h5 class="h5"><strong>Edit Data</strong></h5>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-link modal-exit text-dark" onclick="closePopUp()">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="title-line">
+                <form action="/decks/edit/{{db_deck.database_id}}" method="post">
+                <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="hanzi">汉字</span>
+                            <input type="text" class="form-control" placeholder="Hanzi" aria-label="Hanzi" aria-describedby="hanzi" id="edit-hanzi" name="hanzi">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="pinyin">拼音</span>
+                            <input type="text" class="form-control" placeholder="Pinyin" aria-label="Pinyin" aria-describedby="pinyin" id="edit-pinyin" name="pinyin">
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="meaning">意思</span>
+                            <input type="text" class="form-control" placeholder="Meaning" aria-label="Meaning" aria-describedby="meaning" id="edit-meaning" name="meaning">
+                        </div>
+                        <div class="input-group">
+                            <input type="hidden" class="form-control" value=" {{db_deck.database_id}}" name="db_id">
+                        </div>
+                        <div class="input-group">
+                            <input type="hidden" class="form-control" id="edit-id" name="data_id">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <div class="confirm_popup" id="confirm_popup">
+            <div class="modal-content modal-content-confirm">
+                <div class="modal-title">
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <h5 class="h5"><strong>Delete Data</strong></h5>
+                        </div>
+                        <div class="col-6">
+                            <button class="btn btn-link modal-exit text-dark" onclick="closeConfirmPopUp()">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <form action="/decks/delete/{{db_deck.database_id}}" method="post">
+                <div class="modal-body">
+                    <p>Are you sure want to delete this data?</p>
+                </div>
+                <div class="input-group">
+                    <input type="hidden" class="form-control" id="delete-id" name="data_id">
+                </div>
+                <div class="modal-footer">
+                    <button onclick="" class="btn btn-danger">Delete</button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-4 action-section">
+            <div class="row row-btn-action">
+                <div class="col-md-6 my-2 px-1">
+                    <button class="btn btn-warning btn-action">
+                        <i class="fa fa-language btn-icon"></i> <div class="btn-text">Vocabulary</div>
+                    </button>
+                </div>
+                <div class="col-md-6 my-2 px-1">
+                    <button class="btn btn-primary btn-action">
+                        <i class="fa fa-book btn-icon"></i> <div class="btn-text">Grammar</div>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <form action="/decks/edit/info/{{ db_deck.database_id }}" method="POST">
+                    <div class="mb-3 mt-3">
+                        <label for="database_title" class="form-label">Database Name</label>
+                        <input type="text" name="title" class="form-control" id="database_title" value="{{ db_deck.name }}" aria-describedby="database_title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="banner" class="form-label">Banner File Name</label>
+                        <input type="text" name="banner" class="form-control" id="banner" value="{{ db_deck.banner }}" aria-describedby="banner">
+                    </div>
+                    <div class="mb-3">
+                        <label for="total_words" class="form-label">Description</label>
+                        <textarea type="text" name="desc" class="form-control" id="total_words" aria-describedby="total_words">{{ db_deck.desc }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="total_words" class="form-label">Total Words</label>
+                        <input type="text" name="words" class="form-control" id="total_words" value="{{ deck|length }}" aria-describedby="total_words" readonly="readonly">
+                    </div>
+
+                    <div class="mb-3">
+                        <button class="btn btn-primary w-100" type="submit"> Save </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

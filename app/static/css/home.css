@@ -10,6 +10,7 @@
 .sign-out a{
     color: #fd956b;
     font-weight: 600;
+    text-decoration: none;
 }
 
 .sign-out:hover {
@@ -23,11 +24,96 @@
 .container {
     padding: 2%;
 }
+
+.greetings {
+    color:#fd956b;
+    font-size: 30px;
+    font-family: Gilroy-Light;
+    display: inline;
+}
+
+.greetings-chinese {
+    color:#fd956b;
+    font-size: 35px;
+    font-family: Ma-Shan-Zheng;
+    display: inline;
+}
+
 .heading-content {
     font-family: 'Gilroy-Bold';
     font-size: 20px;
 }
 
 .card-progress {
-    margin: 5px;
+    margin-bottom: 10px;
+}
+
+.col-card {
+    margin-right: 15px;
+    margin-left: 15px;
+}
+.hsk-1-text {
+    color: #ffb808;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hsk-1-text:hover  {
+    color: #ff9900;
+    text-decoration: none;
+}
+
+.hsk-2-text {
+    color: #00dba7;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hsk-2-text:hover  {
+    color: #00b664;
+    text-decoration: none;
+}
+
+.hsk-3-text {
+    color: #ea6f08;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hsk-3-text:hover  {
+    color: #c95a00;
+    text-decoration: none;
+}
+
+.hsk-4-text {
+    color: #f90b1c;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hsk-4-text:hover  {
+    color: #c7000d;
+    text-decoration: none;
+}
+
+.hsk-5-text {
+    color: #193c72;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hsk-5-text:hover  {
+    color: #00265f;
+    text-decoration: none;
+}
+
+.hsk-6-text {
+    color: #683967;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hsk-6-text:hover  {
+    color: #530052;
+    text-decoration: none;
 }
