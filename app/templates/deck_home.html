@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="/static/css/home.css" rel="stylesheet">
+    <link href="/static/css/deck_home.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block title %}
+    : Starlight Learning
+{% endblock %}
+
+{% block main %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/home">
+            <img src="/static/images/Logo.png" height="30" class="d-inline-block align-top" alt="">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav me-auto mr-5 mt-2 mt-lg-6">
+            <a class="nav-item nav-link" href="/home">Dashboard <span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="#">Progress</a>
+            <a class="nav-item nav-link" href="/account">Account</a>
+            </div>
+            <div class="sign-out my-lg-6"><a href="/logout">Log Out</a></div>
+        </div>
+    </div>
+    </nav>
+
+    <div class="container my-5 px-4">
+        <div class="row">
+            <div class="col-8">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="title">
+                            <i class="fa fa-book"></i>  {{deck_title}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 bg-white table-responsive-md"" style="border-radius: 20px;">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <td>No</td>
+                                    <td>Hanzi</td>
+                                    <td>Pinyin</td>
+                                    <td>Meaning</td>
+                                    <td>Accuracy</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in range(words|length) %}
+                                    <tr>
+                                        {% set n = i + 1 %}
+                                        <td>{{n}}</td>
+                                        <td>{{words[i].hanzi}}</td>
+                                        <td>{{words[i].pinyin}}</td>
+                                        <td>{{words[i].meaning}}</td>
+                                        <td>
+                                            {% if user_words[i].status > 60 %}
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        <i class="fa fa-check text-success"></i></i>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        {{user_words[i].status}}%
+                                                    </div>
+                                                </div>
+                                            {% else %} 
+                                                <div class="row">
+                                                    <div class="col-2">
+                                                        <i class="fa fa-times text-danger"></i>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        {{user_words[i].status}}%
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4 mt-5 ps-3">
+                <div class="row">
+                    <div class="col-12 col-lg-6 btn-col">
+                        <button class="btn btn-info btn-action" onclick="window.location.href='/learn/{{deck_id}}/flashcard'">
+                            <i class="fa fa-language btn-icon"></i> <div class="btn-text">Flashcard</div>
+                        </button>
+                    </div>
+                    <div class="col-12 col-lg-6 btn-col">
+                        <button class="btn btn-warning btn-action" disabled>
+                            <i class="fa fa-book btn-icon"></i> <div class="btn-text">Grammar</div>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 btn-col-learn">
+                        <button disabled class="btn btn-outline-danger btn-action-learn btn-border btn-outline-red" onclick="window.location.href='/learn/{{deck_id}}'">
+                            <i class="fa fa-book btn-icon btn-learn"><span class="btn-text-learn"> Learn</span></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 btn-col-learn">
+                        <button class="btn btn-outline-success btn-action-learn btn-border btn-outline-green" onclick="openQuizPopUp()">
+                            <i class="fa fa-question btn-icon btn-learn"><span class="btn-text-learn"> Quiz</span></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 btn-col-learn">
+                        <button class="btn btn-primary btn-action-learn"  onclick="window.location.href='/test/{{deck_id}}'">
+                            <i class="fa fa-play btn-icon btn-learn"><span class="btn-text-learn">  Unit Test</span></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+    
+
+            <div class="quiz_popup" id="quiz_popup">
+                <div class="modal-content modal-content-confirm">
+                    <div class="modal-title">
+                        <div class="row align-items-center">
+                            <div class="col-6">
+                                <h5 class="h5"><strong>Choose Quiz Type</strong></h5>
+                            </div>
+                            <div class="col-6">
+                                <button class="btn btn-link modal-exit text-dark" onclick="closeQuizPopUp()">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <form action="/quiz/{{deck_id}}" method="POST">
+                    <div class="modal-body d-flex flex-column">
+                        <div class="row">
+                            <input type="hidden" id="quiz_type" value="random" name="type">
+                            <div class="col-md-4 mb-2">
+                                <button type="button"  class="btn btn-outline-primary btn-quiz" onclick="quizTypeButton('hanzi')" id="btn-quiz-hanzi">
+                                    <div class="banner">
+                                        汉字
+                                    </div>
+                                    Hanzi
+                                </button>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <button type="button" class="btn btn-outline-dark btn-quiz" onclick="quizTypeButton('pinyin')" id="btn-quiz-pinyin">
+                                    <div class="banner">
+                                        拼音
+                                    </div>
+                                    Pinyin
+                                </button>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <button type="button" class="btn btn-outline-danger btn-quiz" onclick="quizTypeButton('meaning')" id="btn-quiz-meaning"> 
+                                    <div class="banner">
+                                        意思
+                                    </div>
+                                    Meaning
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <div class="mb-1">
+                                    <label for="start_number" class="form-label">Start Number</label>
+                                    <input name="start" type="number" min="1" value="1" max="{{words|length - 50}}" class="form-control" id="start_number"" oninput="modifyMinMax()">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-1">
+                                    <label for="finish_number" class="form-label">End Number</label>
+                                    <input name="finish" type="number" min="30" value="{{words|length}}" max="{{words|length}}" class="form-control" id="finish_number" oninput="modifyMinMax()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 text-secondary">
+                                <i>Minimum total number is 30!</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success"><i class="fa fa-play"></i> Start Quiz</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+
+            <script src="/static/js/deck_home.js"></script>
+{% endblock %}

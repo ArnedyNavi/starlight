@@ -54,3 +54,16 @@ class WordsModel(db.Model):
         self.hanzi = hanzi
         self.pinyin = pinyin
         self.meaning = meaning
+
+class ProgressModel(db.Model):
+    __tablename__ = 'progress'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String())
+    deck_id = db.Column(db.String())
+    mastered = db.Column(db.Integer())
+
+    def __init__(self, user_id, deck_id, mastered):
+        self.user_id = user_id
+        self.deck_id = deck_id
+        self.mastered = mastered

@@ -1,3 +1,7 @@
+body {
+    background-color: #f0f0f0;
+}
+
 .sign-out {
     border: 2px solid #fd956b;
     border-radius: 7px;
@@ -27,7 +31,7 @@
 
 .greetings {
     color:#fd956b;
-    font-size: 30px;
+    font-size: 22px;
     font-family: Gilroy-Light;
     display: inline;
 }
@@ -41,7 +45,14 @@
 
 .heading-content {
     font-family: 'Gilroy-Bold';
-    font-size: 20px;
+    font-size: 18px;
+    background-color: #212529;
+    padding-left: 10px;
+    padding-top: 5px;
+    width: 150px;
+    height: 40px;
+    border-radius: 50px;
+    color: white;
 }
 
 .card-progress {
@@ -116,4 +127,48 @@
 .hsk-6-text:hover  {
     color: #530052;
     text-decoration: none;
+}
+
+.form-search {
+    background-color: rgb(219, 219, 219);
+    border: none;
+    width: 100%;
+    height: 50px;
+    border-radius: 30px;
+    padding: 12px;
+}
+
+
+.input-search {
+    background-color: transparent;
+    border: none;
+    width: 80%;
+}
+
+.input-search:focus {
+    outline: none;
+}
+
+.search-button {
+    float: right;
+    background-color: transparent;
+    border: none;
+}
+
+.btn-deck-search {
+    float: right;
+    font-weight: bold;
+}
+
+.card-img-top {
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+.card-col, .card {
+    border-radius: 30px;
+}
+
+.card-footer {
+    background-color: transparent;
 }

@@ -1,0 +1,81 @@
+{% extends "layout_test.html" %}
+
+{% block head %}
+    <link href="/static/css/home.css" rel="stylesheet">
+    <link href="/static/css/quiz.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+{% endblock %}
+
+
+{% block title %}
+    : Starlight Learning
+{% endblock %}
+
+{% block main %}
+<body">
+    <div class="page-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">
+                <img src="/static/images/Logo.png" height="30" class="d-inline-block align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto mr-5 mt-2 mt-lg-6">
+                <a class="nav-item nav-link" href="/home">Dashboard <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Progress</a>
+                <a class="nav-item nav-link" href="/account">Account</a>
+                </div>
+                <div class="sign-out my-lg-6"><a href="/logout">Log Out</a></div>
+            </div>
+        </div>
+        </nav>
+
+        <div class="container my-5 px-4">
+            <div id="test">
+
+            </div>
+        </div>
+        <footer class="small text-center text-muted footer">
+            <a href="#" class="footer-text">Terms of Service</a> <a href="#" class="footer-text">Privacy Policy</a> <a href="#" class="footer-text">About</a> <span class="copy">&copy;  @星光学 App 2021 </span>
+        </footer>
+    </div>
+    <div class="confirm_popup" id="confirm_popup">
+        <div class="modal-content modal-content-confirm">
+            <div class="modal-title">
+                <div class="row align-items-center">
+                    <div class="col-6">
+                        <h5 class="h5"><strong>Submit Answers</strong></h5>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-link modal-exit text-dark" onclick="closeConfirmPopUp()">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="modal-body">
+                <p>Are you sure want to submit your answers?</p>
+            </div>
+            <div class="input-group">
+                <input type="hidden" class="form-control" id="delete-id" name="data_id">
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeConfirmPopUp()" class="btn btn-danger">Cancel</button>
+                <button onclick="submitAnswer()" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="/static/js/quiz.js"></script>
+<script>
+    questions_data = questionProcessing('{{words|tojson}}', '{{type}}');
+    startTest(questions_data.question, questions_data.desc);
+</script>
+
+{% endblock %}

@@ -9,6 +9,7 @@ from .util import *
 from .csv_read import *
 from datetime import datetime
 import time
+import json
 
 app = Flask(__name__)
 app.secret_key = "akldj92ey2dkwbdkagswu19"
@@ -31,6 +32,32 @@ def after_request(response):
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
+
+# Serialize 
+###################
+
+from sqlalchemy.ext.declarative import DeclarativeMeta
+
+class AlchemyEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        if isinstance(obj.__class__, DeclarativeMeta):
+            # an SQLAlchemy class
+            fields = {}
+            for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+                data = obj.__getattribute__(field)
+                try:
+                    json.dumps(data) # this will fail on non-encodable values, like other classes
+                    fields[field] = data
+                except TypeError:
+                    fields[field] = None
+            # a json-encodable dict
+            return fields
+
+        return json.JSONEncoder.default(self, obj)
+##################
+
+# App
 
 @app.route("/")
 def index():
@@ -121,9 +148,17 @@ def home():
     username = session["username"]
     name = session["name"]
 
+    decks = ProgressModel.query.filter_by(user_id=user).all()
+
+    decks_info = []
+    for deck in decks:
+        deck_info = DeckModel.query.filter_by(id=deck.deck_id).first()
+        deck_info.mastered = deck.mastered
+        decks_info.append(deck_info)
+
     if name =="admin":
         return redirect("/admin")
-    return render_template("home.html", name=name)
+    return render_template("home.html", name=name, decks_info=decks_info)
 
 @app.route("/logout")
 def logout():
@@ -236,10 +271,183 @@ def import_data():
         db.session.commit()
     return redirect("/admin")
 
-@app.route("/learn/<level>")
+@app.route("/course/<deck>")
 @login_required
-def learn(level):
-    return redirect("/")
+def learn(deck):
+    user_id = session["user_id"]
+    username = session["username"]
+
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+
+    words = WordsModel.query.filter_by(database_id=deck).order_by(WordsModel.id).all()
+    
+
+    user_words = WordStatusModel.query.filter_by(user_id=user_id).filter_by(deck_id=deck_id).order_by(WordStatusModel.database_id).all()
+
+    return render_template("deck_home.html", words=words, deck_title=deck_info.name, deck_id=deck, user_words=user_words)
+
+@app.route("/test/<deck>")
+@login_required
+def test(deck):
+    user_id = session["user_id"]
+    username = session["username"]
+
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+
+    words = WordsModel.query.filter_by(database_id=deck).order_by(WordsModel.id).all()
+
+
+    return render_template("test.html", words=json.dumps(words, cls=AlchemyEncoder), deck_title=deck_info.name, deck_id=deck)
+
+@app.route("/test/<deck>/submit", methods=['POST'])
+@login_required
+def submit(deck):
+    user_id = session["user_id"]
+    answer = request.form.to_dict(flat=False)
+    
+    data = json.loads(answer["data"][0])
+    i = 0
+    for d in data:
+        data_id = d["id"]
+        data_status = d["status"]
+        status_now = WordStatusModel.query.filter_by(user_id=user_id).filter_by(database_id=data_id).first()
+        correct = status_now.correct
+        missed = status_now.missed
+        if data_status == 0:
+            missed = missed + 1
+            db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"missed": missed})
+        else:
+            correct = correct + 2
+            db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"correct": correct})
+        db.session.commit()
+
+    updatestatus(deck)
+
+    return "Success"
+
+@app.route("/quiz/<deck>", methods=["POST"])
+@login_required
+def quiz(deck):
+    user_id = session["user_id"]
+
+    start = int(request.form.get("start"))
+    finish = int(request.form.get("finish"))
+    quiz_type = request.form.get("type")
+
+
+    words = WordsModel.query.filter_by(database_id=deck).order_by(WordsModel.pinyin).all()
+    returned_words = words[start-1:finish-1]
+
+    return render_template('quiz.html', words=json.dumps(returned_words, cls=AlchemyEncoder), type=quiz_type)
+
+@app.route("/quiz/<deck>/submit", methods=['POST'])
+@login_required
+def quiz_submit(deck):
+    user_id = session["user_id"]
+    answer = request.form.to_dict(flat=False)
+    
+    data = json.loads(answer["data"][0])
+    i = 0
+    for d in data:
+        data_id = d["id"]
+        data_status = d["status"]
+        status_now = WordStatusModel.query.filter_by(user_id=user_id).filter_by(database_id=data_id).first()
+        correct = status_now.correct
+        missed = status_now.missed
+        if data_status == 0:
+            missed = missed + 1
+            db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"missed": missed})
+        else:
+            correct = correct + 1
+            db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"correct": correct})
+        db.session.commit()
+
+    updatestatus(deck)
+
+    return "Success"
+
+@app.route("/learn/<deck>/flashcard")
+@login_required
+def flashcard(deck):
+    user_id = session["user_id"]
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+
+    words = WordsModel.query.filter_by(database_id=deck).order_by(WordsModel.id).all()
+    progress = ProgressModel.query.filter_by(user_id=user_id).filter_by(deck_id=deck_id).first()
+    
+    last_seen = progress.flashcard
+    return render_template('flashcard.html', words=json.dumps(words, cls=AlchemyEncoder), last_seen=last_seen)
+
+@app.route("/learn/<deck>/flashcard/save", methods=['POST'])
+@login_required
+def save_progress_flashcard(deck):
+    user_id = session["user_id"]
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+
+    data = request.form.to_dict(flat=False)
+    
+    progress = json.loads(data["data"][0])
+
+    db.session.query(ProgressModel).filter_by(user_id=user_id).filter_by(deck_id=deck_id).update({'flashcard': progress})
+    db.session.commit()
+    return 'Success'
+
+@app.route("/course/<deck>/start")
+@login_required
+def learn_start(deck):
+    user_id = session["user_id"]
+    username = session["username"]
+
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+
+    deck_add = ProgressModel(user_id, deck_info.id, 0)
+    db.session.add(deck_add)
+    db.session.commit()
+
+    words = WordsModel.query.filter_by(database_id=deck).all()
+    for word in words:
+        word_progress_add = WordStatusModel(user_id, word.id, 0, 0, 0, deck_info.id)
+        db.session.add(word_progress_add )
+        db.session.commit()
+
+    url_redirect = "/course/" + deck
+    return redirect(url_redirect)
+
+@app.route("/search", defaults={'query': None}, methods=['POST'])
+@app.route("/search/<query>", methods=['GET'])
+@login_required
+def search(query):
+    user_id = session["user_id"]
+    username = session["username"]
+
+    if request.method == "POST":
+        query = request.form.get("query")
+
+    query = query.lower()
+    search_query = "%{}%".format(query)
+    decks = DeckModel.query.filter(DeckModel.name.ilike(search_query)).order_by(DeckModel.id).all()
+    status_list = ProgressModel.query.filter_by(user_id=user_id).order_by(ProgressModel.deck_id).all()
+
+    if len(status_list) != 0:
+        for i in range(len(decks)):
+            for j in range(len(status_list)):
+                if j == 0:
+                    if decks[i].id == status_list[j].deck_id:
+                        decks[i].signed = True
+                    else:
+                        decks[i].signed = False
+                else:
+                    if decks[i].id == status_list[j].deck_id:
+                        decks[i].signed = True
+    else:
+        for i in range(len(decks)):
+            decks[i].signed = False
+
+    return render_template("search.html", decks = decks)
 
 @app.route("/account")
 @login_required
@@ -301,3 +509,72 @@ class WordsModel(db.Model):
         self.hanzi = hanzi
         self.pinyin = pinyin
         self.meaning = meaning
+
+class ProgressModel(db.Model):
+    __tablename__ = 'progress'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String())
+    deck_id = db.Column(db.String())
+    mastered = db.Column(db.Integer())
+    flashcard = db.Column(db.Integer())
+    progress = db.Column(db.Integer())
+
+    def __init__(self, user_id, deck_id, mastered, flashcard, progress):
+        self.user_id = user_id
+        self.deck_id = deck_id
+        self.mastered = mastered
+        self.flashcard = flashcard
+        self.progress = progress
+
+class WordStatusModel(db.Model):
+    __tablename__ = 'word_status'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String())
+    database_id = db.Column(db.Integer())
+    correct = db.Column(db.Integer())
+    missed = db.Column(db.Integer())
+    status = db.Column(db.Integer())
+    deck_id = db.Column(db.Integer())
+
+    def __init__(self, user_id, database_id, correct, missed, status, deck_id):
+        self.user_id = user_id
+        self.database_id = database_id
+        self.correct = correct
+        self.missed = missed
+        self.status = status
+        self.deck_id = deck_id
+        
+###
+
+def updatestatus(deck):
+    user_id = session["user_id"]
+    
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+    status_now = WordStatusModel.query.filter_by(user_id=user_id).filter_by(deck_id=deck_id).all()
+
+    mastered = 0
+    for data in status_now:
+        data_id = data.database_id
+        correct = data.correct
+        missed = data.missed
+        accuracy = correct / (correct + missed) * 100
+        if accuracy >= 60:
+            mastered += 1
+        db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"status": accuracy})
+        db.session.commit()
+    
+    update_mastered(deck, mastered)
+
+def update_mastered(deck, mastered):
+    user_id = session["user_id"]
+    
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+    db.session.query(ProgressModel).filter_by(user_id=user_id).filter_by(deck_id=deck_id).update({"mastered": mastered})
+    db.session.commit()
+
+
+

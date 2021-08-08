@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="/static/css/home.css" rel="stylesheet">
+    <script src="/static/js/home.js"></script>
+{% endblock %}
+
+
+{% block title %}
+    : Starlight Learning
+{% endblock %}
+
+{% block main %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/Logo.png" height="30" class="d-inline-block align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto mr-5 mt-2 mt-lg-6">
+                <a class="nav-item nav-link" href="/home">Dashboard <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Progress</a>
+                <a class="nav-item nav-link" href="/account">Account</a>
+                </div>
+                <div class="sign-out my-lg-6"><a href="/logout">Log Out</a></div>
+            </div>
+        </div>
+    </nav>
+    <div class="containe mx-5">
+        <div class="row mt-2">
+            <div class="col-8 mt-1">
+                <div class="search-bar align-items-center" id="search_bar">
+                    <form class="form-search" action="/search" method="POST">
+                        <input class="input-search" type="text" name="query" placeholder="Search Deck" >
+                        <button class="search-button" type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row my-2 ms-1">
+            Search result: {{decks|length}} decks available
+        </div>
+        <div class="row row-cols-2 row-cols-lg-4">
+            {% for deck in decks %}
+            <div class="col mb-4">
+                <div class="card card-progress ml-2 h-100">
+                    <img class="card-img-top" src="/static/images/{{ deck.banner }}" alt="Card image cap">
+                    <div class="card-body">
+                      <h5 class="card-title"><a class="{{deck.database_id}}-text" href="#">{{deck.name}}</a></h5>
+                      <p class="card-text">{{deck.desc}}</p>
+                    </div>
+                    <div class="card-footer float-end">
+                        {% if deck.signed == False %}
+                        <button class="btn btn-warning btn-deck-search" onclick="window.location.href='/course/{{deck.database_id}}/start'">
+                            Start Learn
+                        </button>
+                        {% else %}
+                        <button class="btn btn-primary btn-deck-search" onclick="window.location.href='/course/{{deck.database_id}}'">
+                            Learn
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+

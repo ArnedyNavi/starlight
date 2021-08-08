@@ -1,0 +1,105 @@
+{% extends "layout_test.html" %}
+
+{% block head %}
+    <link href="/static/css/home.css" rel="stylesheet">
+    <link href="/static/css/flashcard.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+{% endblock %}
+
+
+{% block title %}
+    : Starlight Learning
+{% endblock %}
+
+{% block main %}
+<body">
+    <div class="page-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">
+                <img src="/static/images/Logo.png" height="30" class="d-inline-block align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto mr-5 mt-2 mt-lg-6">
+                <a class="nav-item nav-link" href="/home">Dashboard <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Progress</a>
+                <a class="nav-item nav-link" href="/account">Account</a>
+                </div>
+                <div class="sign-out my-lg-6"><a href="/logout">Log Out</a></div>
+            </div>
+        </div>
+        </nav>
+
+        <div class="container mt-2 mb-0 px-4">
+            <div class="row">
+                <div class="col-2 text-number" id="number">
+                </div>
+            </div>
+            <div class="row d-flex flex-row align-items-center mx-0">
+                <div class="col-md-2 col-1 mx-0">
+                    <button class="btn btn-back btn-slide" id="btn-back" onclick="beforeCard()">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                </div>
+                <div class="col-md-8 col-10 mx-0">
+                    <div class="card">
+                        <div class="card__inner">
+                            <div class="card__face card__face--front">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-12 text-hanzi text-center" id="hanzi">
+                                                Hanzi
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 text-pinyin text-center" id="pinyin">
+                                                Pinyin
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card__face card__face--back">
+                                <div class="card__content">
+                                    <div class="meaning" id="meaning">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 col-1 mx-0">
+                    <button class="btn btn-next btn-slide" id="btn-next" onclick="nextCard()">
+                        <i class="fa fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row d-flex mt-4">
+                <div class="col-12 text-center">
+                    <button class="btn btn-danger btn-home" onclick="window.location.href = '/home'">
+                        <i class="fa fa-home"></i> Home
+                    </button>
+                    <button class="btn btn-primary btn-save" onclick="saveProgress()">
+                        <i class="fa fa-save"></i> Save Progress
+                    </button>
+                </div>
+            </div>
+        </div>
+        <footer class="small text-center text-muted footer">
+            <a href="#" class="footer-text">Terms of Service</a> <a href="#" class="footer-text">Privacy Policy</a> <a href="#" class="footer-text">About</a> <span class="copy">&copy;  @星光学 App 2021 </span>
+        </footer>
+    </div>
+</body>
+
+<script src="/static/js/flashcard.js"></script>
+<script>
+    passData('{{words|tojson}}', '{{last_seen}}');
+</script>
+
+{% endblock %}

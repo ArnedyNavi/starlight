@@ -1,0 +1,138 @@
+body {
+    background-color: #f0f0f0;
+}
+.part-text {
+    color: #ff5b19;
+    font-family: 'Gilroy-Bold';
+    font-size: 45px;
+}
+
+.desc-text {
+    color: black;
+    font-family: 'Gilroy Light';
+    font-size: 25px;
+}
+
+.question-card {
+    background-color: #ebebeb;
+    min-height: 100px;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.question-num {
+    font-family: Qanelas;
+    width: 5%;
+}
+
+.question {
+    color:black;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+}
+
+.btn-option-big {
+    width: 100%;
+    font-size: 25px;
+}
+
+.btn-option-small {
+    width: 100%;
+    font-size: 15px;
+}
+
+.btn-next {
+    float: right;
+    font-size: 20px;
+}
+
+.form-hanzi {
+    height: 60px;
+    width: 140px;
+}
+
+.confirm_popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: hidden; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+  }
+  
+  .modal-content {
+    background-color: white;
+    width: 500px;
+    min-height: 30%;
+    border-radius: 10px;
+    margin: auto;
+    top: 20%;
+    padding: 0px;
+    border: 1px solid grey;
+  }
+
+@media screen and (max-width: 600px) {
+    .modal-content {
+        width: 400px;
+    }
+}
+  
+.modal-title {
+    padding: 10px 20px 0px 20px;
+}
+
+.modal-exit {
+    float: right;
+}
+
+.title-line {
+    padding-top: 0;
+    margin-top: 5px;
+}
+
+.score-result {
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+    margin: auto;
+    box-shadow: 0 0 0 5px #ebebeb, 0 0 0 10px white, 0 0 0 15px rgb(211, 211, 211);
+}
+
+.score {
+    margin: auto;
+    font-size: 60px;
+    text-align: center;
+    padding: 15px;
+    color: white;
+    font-family: 'Gilroy-Bold';
+}
+
+.prompt {
+    font-family: 'Gilroy-Bold';
+    font-size: 40px;
+}
+
+.detail-score {
+    background-color: #ebebeb;
+    border-radius: 30px;
+    min-height: 80px;
+}
+
+.detail-row {
+    width: 100%;
+}
+
+.detail-score-text {
+    font-size: 19px;
+    font-family: 'Montserrat';
+    font-weight: bolder;
+    width: 100px;
+}
+
+.detail-part-text {
+    font-family: 'Montserrat';
+    font-weight: normal;
+}

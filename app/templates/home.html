@@ -2,6 +2,7 @@
 
 {% block head %}
     <link href="/static/css/home.css" rel="stylesheet">
+    <script src="/static/js/home.js"></script>
 {% endblock %}
 
 
@@ -12,10 +13,10 @@
 {% block main %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/home">
                 <img src="/static/images/Logo.png" height="30" class="d-inline-block align-top" alt="">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -28,93 +29,66 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
+    <div class="containe mx-5">
+        <div class="row mt-2">
+            <div class="col-lg-5">
                 <div class="greetings"><div class="greetings-chinese">你好</div>, {{name}}! </div>
             </div>
+            <div class="col-lg-7 mt-1">
+                <div class="search-bar align-items-center" id="search_bar">
+                    <form class="form-search" action="/search" method="POST">
+                        <input class="input-search" type="text" name="query" placeholder="Search Deck" >
+                        <button class="search-button" type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="row">
+        <div class="row my-2">
             <div class="col-lg-12">
-                <div class="heading-content">
-                    Your Decks
+                <div class="heading-content heading-deck">
+                    <i class="fas fa-list-ul"></i> Your Decks
                 </div>
             </div>
         </div>
-        <div class="row row-cols-2 row-cols-md-4">
-            <div class="col mb-4">
+        {% if decks_info|length != 0 %}
+        <div class="row row-cols-2 row-cols-lg-4">
+            {% for deck in decks_info %}
+            <div class="col mb-4 card-col">
                 <div class="card card-progress ml-2 h-100">
-                    <img class="card-img-top" src="/static/images/hsk-1.png" alt="Card image cap">
+                    <img class="card-img-top" src="/static/images/{{ deck.banner }}" alt="Card image cap">
                     <div class="card-body">
-                      <h5 class="card-title"><a class="hsk-1-text" href="/learn/hsk-1">HSK 1 </a></h5>
-                      <p class="card-text">Learn simple words and phrases. Beginner lesson</p>
+                      <h5 class="card-title"><a class="{{deck.database_id}}-text" href="/course/{{deck.database_id}}">{{deck.name}}</a></h5>
+                      <p class="card-text">{{deck.desc}}</p>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Your Progress: <></small>
+                        <small class="text-muted">Your Progress: 
+                            {% set prog = deck.mastered/deck.total_words*100 %}
+                            <div class="progress">
+                                <div class="progress-bar 
+                                    {% if prog < 30 %}
+                                        bg-danger
+                                    {% elif prog >= 30 and prog < 50 %}
+                                        bg-warning 
+                                    {% elif prog >= 50 and prog < 80 %} 
+                                        bg-primary 
+                                    {% else %} 
+                                        bg-success 
+                                    {% endif %}
+                                    " role="progressbar" style="width: {{prog}}%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            {{deck.mastered}} / {{deck.total_words}}</small>
                     </div>
                 </div>
             </div>
-            <div class="col mb-4">
-                <div class="card card-progress ml-2 h-100">
-                    <img class="card-img-top" src="/static/images/hsk-2.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="hsk-2-text" href="/learn/hsk-2">HSK 2</a></h5>
-                      <p class="card-text">Learn communicate simply and directly on daily topics you are familiar with in Chinese.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Your Progress: <></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-4">
-                <div class="card card-progress ml-2 h-100">
-                    <img class="card-img-top" src="/static/images/hsk-3.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="hsk-3-text" href="/learn/hsk-3">HSK 3</a></h5>
-                      <p class="card-text">Learn to conduct basic communication in daily life, study and work, so you can manage most communication when traveling in China.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Your Progress: <></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-4">
-                <div class="card card-progress ml-2 h-100">
-                    <img class="card-img-top" src="/static/images/hsk-4.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="hsk-4-text" href="/learn/hsk-4">HSK 4</a></h5>
-                      <p class="card-text">Learn to discuss a relatively wide range of topics in Chinese so you can communicate with native Chinese speakers fluently in common situations.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Your Progress: <></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-4">
-                <div class="card card-progress ml-2 h-100">
-                    <img class="card-img-top" src="/static/images/hsk-5.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="hsk-5-text" href="/learn/hsk-5">HSK 5 </a></h5>
-                      <p class="card-text">Learn to read Chinese newspapers and magazines, watch Chinese films and TVs, and write and deliver a full speech in Chinese.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Your Progress: <></small>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-4">
-                <div class="card card-progress ml-2 h-100">
-                    <img class="card-img-top" src="/static/images/hsk-6.png" alt="Card image cap">
-                    <div class="card-body">
-                      <h5 class="card-title"><a class="hsk-6-text" href="/learn/hsk-6">HSK 6</a></h5>
-                      <p class="card-text">Learn advance Chinese so you can understand what you read and hear, and express yourself smoothly in written and oral Chinese.</p>
-                    </div>
-                    <div class="card-footer">
-                        <small class="text-muted">Your Progress: <></small>
-                    </div>
-                </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="row">
+            <div class="col-12">
+                You haven't learnt anything. 
             </div>
         </div>
+        {% endif %}
     </div>
 {% endblock %}
 
