@@ -404,7 +404,7 @@ def learn_start(deck):
 
     deck_info = DeckModel.query.filter_by(database_id=deck).first()
 
-    deck_add = ProgressModel(user_id, deck_info.id, 0)
+    deck_add = ProgressModel(user_id, deck_info.id, 0, 1, 1)
     db.session.add(deck_add)
     db.session.commit()
 
