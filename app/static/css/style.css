@@ -38,14 +38,21 @@ body {
 
 .footer-text {
     color: #828988;
+    text-decoration: none;
 }
 
 .footer-text:hover {
-    color: white;
+    color: #FF7F4D;
     text-decoration: none;
 }
 .footer{
     text-align: center;
     padding-top: 25px;
     padding-bottom: 5px;
+    text-decoration: none;
+}
+
+.copy {
+    color: #FF7F4D;
+    text-decoration: none;
 }

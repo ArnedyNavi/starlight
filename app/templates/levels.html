@@ -1,0 +1,80 @@
+{% extends "layout_test.html" %}
+
+{% block head %}
+    <link href="/static/css/home.css" rel="stylesheet">
+    <link href="/static/css/levels.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+{% endblock %}
+
+
+{% block title %}
+    : Starlight Learning
+{% endblock %}
+
+{% block main %}
+<body">
+    <div class="page-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/home">
+                <img src="/static/images/Logo.png" height="30" class="d-inline-block align-top" alt="">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto mr-5 mt-2 mt-lg-6">
+                <a class="nav-item nav-link" href="/home">Dashboard <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="#">Progress</a>
+                <a class="nav-item nav-link" href="/account">Account</a>
+                </div>
+                <div class="sign-out my-lg-6"><a href="/logout">Log Out</a></div>
+            </div>
+        </div>
+        </nav>
+
+        <div class="container container-learn mt-2 mb-0 px-4">
+            <div class="row">
+                <div class="col-6">
+                    <div class="title">
+                        <i class="fa fa-book"></i>  {{deck_title}}
+                    </div>
+                </div>
+            </div>
+            <div class="row row-cols-3 row-cols-lg-6 row-cols-md-4">
+                {% for i in range((total/25)|round(0)|int) %}
+                <div class="col p-3 my-2">
+                    <div class="levels" 
+                        {% if (i * 25) < (progress + 1) %}
+                            onclick="window.location.href='/learn/{{deck_id}}/{{i+1}}'"
+                            style="cursor: pointer;"
+                        {% endif %}
+                        >
+                        <div class="level" id="card-{{i+1}}" >
+                            <div class="level-heading">
+                                Level 
+                            </div>
+                            <div class="level-text">
+                                {{i+1}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="level-progress-bar mt-2" id="level-{{i+1}}"></div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <footer class="small text-center text-muted footer">
+            <a href="#" class="footer-text">Terms of Service</a> <a href="#" class="footer-text">Privacy Policy</a> <a href="#" class="footer-text">About</a> <span class="copy">&copy;  @星光学 App 2021 </span>
+        </footer>
+    </div>
+</body>
+
+<script src="/static/js/levels.js"></script>
+<script>
+    passData('{{progress}}', '{{total}}');
+    showLevels();
+</script>
+
+{% endblock %}

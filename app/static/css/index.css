@@ -2,14 +2,6 @@ body{
     background: #EEF4FD;
 }
 
-.copy {
-    color: #d5d7d7;
-}
-
-.container {
-    color: #000000;
-}
-
 .heading {
     font-size: 50px;
     font-family: Qanelas;
@@ -86,4 +78,18 @@ body{
     margin-top: 5%;
     margin-bottom: 0px;
     vertical-align: middle;
+}
+
+@media only screen and (max-width: 835px) {
+    .right-side {
+        padding: 20px;
+    }
+
+    .button-signup {
+        width: 100%
+    }
+
+    .button-login {
+        width: 100%
+    }
 }

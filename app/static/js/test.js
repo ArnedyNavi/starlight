@@ -469,7 +469,7 @@ function finishTest() {
         prompt = 'Keep Practicing!';
     }
     else {
-        score_color = '#67ff6f';
+        score_color = '#0F9D58';
         prompt = 'Excellent!'
     }
     for (let i = 0; i < 5; i++) {

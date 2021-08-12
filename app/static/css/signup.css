@@ -50,9 +50,10 @@ body{
 .form-sign-up {
     background-color: rgba(0, 0, 0, 0);;
     border: none;
-    width: 430px;
+    width: 100%;
     height: 15px;
     color: black;
+    margin-right: 5px;
 }
 
 .form-list {
@@ -105,4 +106,22 @@ body{
     color: #FF7F4D;
     text-align: center;
     font-size: 15px;
+}
+
+@media only screen and (max-width: 500px) {
+    .box {
+        width: 100%;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+
+    .sign-up {
+        width: 100%;
+    }
+
+    .subheading-2{ 
+        width: 100%;
+    }
 }

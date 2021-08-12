@@ -1,0 +1,192 @@
+body {
+    background-color: #f0f0f0;
+}
+
+.bg-orange {
+  background-color: #FF7F4D;
+}
+
+.container-learn {
+  display: block;
+}
+
+.quiz-container {
+  display: none;
+}
+
+.progress-bar {
+  min-height: 20px;
+  background-color: #dadada;
+  border-radius: 20px;
+}
+
+.card {
+  background-color: #ffffff;
+  min-height: 400px;
+  border: none;
+}
+
+.icon-next {
+  font-size: 30px;
+}
+
+.btn-next {
+  height: 80px;
+  border-radius: 10px;
+  font-weight: bolder;
+  background-color: #FF7F4D;
+}
+
+.btn-finish {
+  height: 80px;
+  border-radius: 10px;
+  font-weight: bolder;
+  display: none;
+}
+
+.btn-next:hover {
+  background-color: #ff662a;
+}
+
+.btn-next:focus {
+  background-color: #ff662a;
+}
+
+.btn-next-quiz {
+  height: 80px;
+  border-radius: 10px;
+  font-weight: bolder;
+  display: none;
+}
+
+.number {
+  font-size: 25px;
+  font-weight: bold;
+  color: #FF7F4D;
+}
+
+.accuracy {
+  font-size: 35px;
+  font-weight: bolder;
+}
+
+.hr-card {
+  margin-top: 10px;
+}
+
+.hanzi-text {
+  font-size: 50px;
+}
+
+.hanzi-heading {
+  color:#c7c7c7;
+}
+
+.pinyin-text {
+  font-size: 25px;
+  color:#FF7F4D;
+  font-weight: bolder;
+}
+
+.pinyin-heading {
+  color:#c7c7c7;
+}
+
+.meaning-text {
+  font-size: 20px;
+}
+
+.meaning-heading {
+  color:#c7c7c7;
+}
+
+.audio {
+  font-size: 30px;
+  background-color: #e4e4e4 ;
+  width: 55px;
+  height: 55px;
+  padding-top:5px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.audio:hover{
+  background-color: #d6d6d6 ;
+}
+
+.bar{
+  background-color: #ff662a;
+  width: 1%;
+  height: 20px;
+}
+
+.question-hanzi {
+  font-size: 45px;
+  font-weight: bold;
+}
+
+.question-meaning {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.btn-mini-quiz {
+  background-color: #eeeeee;
+  width: 100%;
+  min-height: 60px;
+  height: 100%;
+  text-align: center;
+  border-radius: 30px;
+  font-weight: normal;
+}
+
+.btn-mini-quiz:hover {
+  background-color: #FF7F4D;
+  color: white;
+}
+
+.btn-mini-quiz-correct {
+  background-color: #07B53B;
+  color: white;
+  width: 100%;
+  min-height: 60px;
+  height: 100%;
+  text-align: center;
+  border-radius: 30px;
+  font-weight: normal;
+}
+
+.btn-mini-quiz-wrong {
+  background-color: #E01C2B;
+  color: white;
+  width: 100%;
+  min-height: 60px;
+  height: 100%;
+  text-align: center;
+  border-radius: 30px;
+  font-weight: normal;
+}
+
+.col-option {
+  height: 120%
+}
+
+.card-quiz {
+  min-height: 400px;
+  background-color: white;
+  border-radius: 30px;
+}
+
+.btn-unit-quiz {
+  border-radius: 20px;
+}
+
+.btn-orange {
+  background-color: #FF7F4D;
+  color: black;
+}
+
+.btn-orange:hover {
+  background-color: #ff662a;
+  color: white;
+}

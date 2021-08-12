@@ -19,7 +19,7 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Connect with Database
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://zoihfvvpxkhvvf:95a34e36e017da1e96e0a6e011d95fbca597a148c1fe760dfda5d5a2c05946f5@ec2-34-233-192-238.compute-1.amazonaws.com:5432/d4u5mqi2bjl6k1"
-# app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:ALF30102501@127.0.0.1:5432/hsk_app"
+#app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:ALF30102501@127.0.0.1:5432/hsk_app"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -273,7 +273,7 @@ def import_data():
 
 @app.route("/course/<deck>")
 @login_required
-def learn(deck):
+def course(deck):
     user_id = session["user_id"]
     username = session["username"]
 
@@ -286,6 +286,23 @@ def learn(deck):
     user_words = WordStatusModel.query.filter_by(user_id=user_id).filter_by(deck_id=deck_id).order_by(WordStatusModel.database_id).all()
 
     return render_template("deck_home.html", words=words, deck_title=deck_info.name, deck_id=deck, user_words=user_words)
+
+@app.route("/course/<deck>/learn")
+@login_required
+def levels(deck):
+    user_id = session["user_id"]
+    username = session["username"]
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+
+    words = WordsModel.query.filter_by(database_id=deck).order_by(WordsModel.id).all()
+    total = len(words)
+
+    progress = ProgressModel.query.filter_by(user_id=user_id).filter_by(deck_id=deck_id).first()
+
+    last_seen = progress.progress
+    return render_template("levels.html", deck_title=deck_info.name, total=total, deck_id=deck, progress=last_seen)
+
 
 @app.route("/test/<deck>")
 @login_required
@@ -395,6 +412,60 @@ def save_progress_flashcard(deck):
     db.session.query(ProgressModel).filter_by(user_id=user_id).filter_by(deck_id=deck_id).update({'flashcard': progress})
     db.session.commit()
     return 'Success'
+
+@app.route("/learn/<deck>/<level>")
+@login_required
+def learn(deck, level):
+    user_id = session["user_id"]
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+
+    words = WordsModel.query.filter_by(database_id=deck).order_by(WordsModel.id).all()
+    progress = ProgressModel.query.filter_by(user_id=user_id).filter_by(deck_id=deck_id).first()
+    wordstatus = WordStatusModel.query.filter_by(deck_id=deck_id).order_by(WordStatusModel.database_id).all()
+    
+    word_open = progress.progress
+    status = []
+    for word in wordstatus:
+        status.append(word.status)
+    return render_template('learn.html', words=json.dumps(words, cls=AlchemyEncoder), deck_id=deck, progress=word_open, status=status, current_level=level)
+
+@app.route("/learn/<deck>/<level>/submit", methods=['POST'])
+@login_required
+def learn_quiz_submit(deck, level):
+    user_id = session["user_id"]
+    answer = request.form.to_dict(flat=False)
+    
+    data = json.loads(answer["data"][0])
+    i = 0
+    for d in data:
+        data_id = d["id"]
+        data_status = d["status"]
+        status_now = WordStatusModel.query.filter_by(user_id=user_id).filter_by(database_id=data_id).first()
+        correct = status_now.correct
+        missed = status_now.missed
+        if data_status == 0:
+            missed = missed + 1
+            db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"missed": missed})
+        else:
+            correct = correct + 1
+            db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"correct": correct})
+        db.session.commit()
+
+    updatestatus(deck)
+    update_progress(deck, data[len(d) - 1]["number"])
+    return "Success"
+
+@app.route("/learn/<deck>/<level>/save", methods=['POST'])
+@login_required
+def learn_quiz_save(deck, level):
+    user_id = session["user_id"]
+    answer = request.form.to_dict(flat=False)
+    
+    progress = json.loads(answer["data"][0])
+    update_progress(deck, progress)
+    return "Success"
+
 
 @app.route("/course/<deck>/start")
 @login_required
@@ -560,7 +631,10 @@ def updatestatus(deck):
         data_id = data.database_id
         correct = data.correct
         missed = data.missed
-        accuracy = correct / (correct + missed) * 100
+        if (correct + missed != 0):
+            accuracy = correct / (correct + missed) * 100
+        else:
+            accuracy = 0
         if accuracy >= 60:
             mastered += 1
         db.session.query(WordStatusModel).filter_by(user_id=user_id).filter_by(database_id=data_id).update({"status": accuracy})
@@ -576,5 +650,9 @@ def update_mastered(deck, mastered):
     db.session.query(ProgressModel).filter_by(user_id=user_id).filter_by(deck_id=deck_id).update({"mastered": mastered})
     db.session.commit()
 
-
-
+def update_progress(deck, progress):
+    user_id = session["user_id"]
+    deck_info = DeckModel.query.filter_by(database_id=deck).first()
+    deck_id = deck_info.id
+    db.session.query(ProgressModel).filter_by(user_id=user_id).filter_by(deck_id=deck_id).update({"progress": progress})
+    db.session.commit()

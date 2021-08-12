@@ -1,0 +1,192 @@
+{% extends "layout_test.html" %}
+
+{% block head %}
+    <link href="/static/css/home.css" rel="stylesheet">
+    <link href="/static/css/learn.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+{% endblock %}
+
+
+{% block title %}
+    : Starlight Learning
+{% endblock %}
+
+{% block main %}
+<body">
+    <div class="page-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-orange">
+        <div class="container-fluid">
+            <button class="navbar-brand ms-2 btn" onclick="QuitLearn()">
+                <i class="fa fa-times"> </i> Level {{current_level}}
+            </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto mr-5 mt-2 mt-lg-6">
+                    
+            </div>
+        </div>
+        </nav>
+
+        <div class="container container-learn mt-2 mb-0 px-4" id="container-learn">
+            <div class="row mb-3">
+                <div class="col-11">
+                    <div class="progress-bar">
+                        <div class="bar" id="bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="col-1 mt-2">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 col-md-9">
+                    <div class="row">
+                        <div class="col-lg-2 col-12">
+                            <div class="number" id="number">
+                                0/0
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-10 card p-4">
+                            <div class="row" id="card-container">
+                                <div class="col-12">
+                                    <div class="hanzi-heading">
+                                        Character | 汉字
+                                    </div>
+                                    <div class="hanzi-text mb-4" id="hanzi">
+                                        没关系
+                                    </div>
+        
+                                    <div class="pinyin-heading">
+                                        Pinyin | 拼音
+                                    </div>
+                                    <div class="pinyin-text" id="pinyin">
+                                        pin1 yin1
+                                    </div>
+                                    
+                                    <hr class="hr-card">
+                                    <div class="meaning-text" id="meaning">
+                                        to love, to be fond of
+                                    </div>
+                                    
+                                    <div class="audio mt-5">
+                                        <i class="fa fa-volume-up"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row quiz-container mt-3" id="quiz-container">
+                                <div class="col-12 text-center">
+                                    <div class="question mb-5" id="question-mini-quiz">
+                                        Undefined
+                                    </div>
+                                    <div class="row row-cols-lg-2 row-cols-1 text-center d-flex flex-row align-items-center" id="options">
+                                        <div class="col col-option mt-2">
+                                            <button class="btn btn-mini-quiz" id="1" onclick="chosenOption(this.id)">Option 1</button>
+                                        </div>
+                                        <div class="col col-option mt-2">
+                                            <button class="btn btn-mini-quiz" id="2" onclick="chosenOption(this.id)">Option 2</button>
+                                        </div>
+                                        <div class="col col-option mt-2">
+                                            <button class="btn btn-mini-quiz" id="3" onclick="chosenOption(this.id)">Option 3</button>
+                                        </div>
+                                        <div class="col col-option mt-2">
+                                            <button class="btn btn-mini-quiz" id="4" onclick="chosenOption(this.id)">Option 4</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2 col-md-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <button class="btn btn-next" onclick="nextWord()" id="btn-next">
+                                <div class="icon-next">
+                                    <i class="fa fa-play">
+                                        
+                                    </i>
+                                </div>
+                                Next
+                            </button>
+                            <button class="btn btn-secondary btn-next-quiz" onclick="skipQuiz()" id="btn-next-quiz">
+                                <div class="icon-next">
+                                    <i class="fa fa-question">
+                                        
+                                    </i>
+                                </div>
+                                Skip
+                            </button>
+                            <button class="btn btn-success btn-finish" onclick="Quiz()" id="btn-finish">
+                                <div class="icon-next">
+                                    <i class="fa fa-flag-checkered">
+                                        
+                                    </i>
+                                </div>
+                                Quiz
+                            </button>
+                        </div>
+                    </div>
+                    <div id="accuracy-row">
+                        <div class="row mt-4" id="accuracy-row">
+                            <div class="col-12">
+                                Accuracy
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 accuracy" id="accuracy">
+                                0%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container container-quiz mt-2 mb-0 px-4" id="container-quiz" style="display:none">
+            <div class="row card-quiz">
+                <div class="col-12">
+                    <div class="row mt-3 mx-2" id="quiz-container">
+                        <div class="col-12 text-center">
+                            <div class="question mb-5 mt-4" id="question-quiz">
+                                Question
+                            </div>
+                            <div class="row row-cols-lg-2 row-cols-1 text-center d-flex flex-row align-items-center" id="options-quiz">
+                                <div class="col col-option mt-2">
+                                    <button class="btn btn-mini-quiz btn-option-quiz" id="quiz-1" onclick="checkQuizOption(1, this.id)">Option 1</button>
+                                </div>
+                                <div class="col col-option mt-2">
+                                    <button class="btn btn-mini-quiz btn-option-quiz" id="quiz-2" onclick="checkQuizOption(2, this.id)">Option 2</button>
+                                </div>
+                                <div class="col col-option mt-2">
+                                    <button class="btn btn-mini-quiz btn-option-quiz" id="quiz-3" onclick="checkQuizOption(3, this.id)">Option 3</button>
+                                </div>
+                                <div class="col col-option mt-2">
+                                    <button class="btn btn-mini-quiz btn-option-quiz" id="quiz-4" onclick="checkQuizOption(4, this.id)">Option 4</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3 mb-3 mx-2" style="float: right;">
+                        <div class="col-12">
+                            <button class="btn btn-orange btn-unit-quiz" id="btn-next-unit-quiz" onclick="nextQuestion()">
+                                <i class="fa fa-play"></i> Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="small text-center text-muted footer">
+            <a href="#" class="footer-text">Terms of Service</a> <a href="#" class="footer-text">Privacy Policy</a> <a href="#" class="footer-text">About</a> <span class="copy">&copy;  @星光学 App 2021 </span>
+        </footer>
+    </div>
+</body>
+
+<script src="/static/js/learn.js"></script>
+<script>
+    let deck_id = '{{deck_id}}';
+    passData('{{words|tojson}}', '{{progress}}', '{{status}}', '{{current_level}}');
+</script>
+
+{% endblock %}

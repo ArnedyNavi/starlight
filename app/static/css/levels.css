@@ -1,0 +1,55 @@
+.title {
+    background-color: #fd956b;
+    width: 120px;
+    height: 40px;
+    border-radius: 20px;
+    color: white;
+    font-family: 'Qanelas';
+    text-align: left;
+    padding: 5px 0px 0px 15px;
+    font-size: 20px;
+}
+
+
+.levels {
+    height: 120px;
+    background-color: #dbdbdb;
+    border-radius: 20px;
+    cursor: context-menu;
+    text-align: center;
+}
+
+.level-heading {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.level-text {
+    font-size: 40px;
+    font-weight: bolder;
+}
+
+.level {
+    height: 100%;
+    padding-top: 20px;
+    border-radius: 20px;
+    color:#a5a5a5;
+}
+
+.levels-on {
+    background-color: #ff7038;
+    color: white;
+    height: 100%;
+    padding-top: 20px;
+    border-radius: 20px;
+}
+
+.levels-on:hover {
+    background-color: #f85211;
+}
+
+.level-progress-bar {
+    height: 25px;
+    width: 100%;
+    border-radius: 10px;
+}

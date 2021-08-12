@@ -28,9 +28,11 @@ body{
 .subheading a{
     color: #069cd8;
 }
+
 .sign-in {
     display: inline-block;
 }
+
 .box {
     text-align: left;
     padding-left: 5px;
@@ -46,6 +48,7 @@ body{
 .box:hover {
     border: 1.5px solid black;
     border-color: black;
+    padding: 5px;
 }
 .label-signin {
     color: black;
@@ -53,14 +56,25 @@ body{
 }
 
 .form-sign-in {
-    background-color: #EEF4FD;
+    background-color: transparent;
     border: none;
-    width: 430px;
-    color: white;
+    width: 100%;
+    color: black;
 }
 
 .form-sign-in:focus {
     outline: none;
+}
+
+.form-sign-in:autofill {
+    background-color: red;
+}
+
+.form-sign-in:-webkit-autofill
+{
+    -webkit-text-fill-color: black;
+    font-family: Montserrat;
+    -webkit-background-composite: clear !important;
 }
 
 .btn-submit {
@@ -76,4 +90,18 @@ body{
 .btn-submit:hover, .btn-submit:focus {
     outline: 0;
     background-color: #fc5f21;
+}
+
+@media only screen and (max-width: 500px) {
+    .box {
+        width: 100%;
+    }
+
+    .btn-submit {
+        width: 100%;
+    }
+
+    .sign-in {
+        width: 100%;
+    }
 }
