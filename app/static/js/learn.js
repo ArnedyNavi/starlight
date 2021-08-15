@@ -38,7 +38,7 @@ function passData(data, init, status, level) {
 }
 
 function findLevelNow() {
-    if ((level_now * 25) < real_last) {
+    if ((level_now * 25) < real_last || real_last % 25 == 0) {
         last = ((level_now - 1) * 25) + 1;
     }
     else {
