@@ -453,7 +453,7 @@ def learn_quiz_submit(deck, level):
         db.session.commit()
 
     updatestatus(deck)
-    update_progress(deck, data[len(data) - 1]["number"])
+    update_progress(deck, ((int(level) - 1)*25) + data[len(data) - 1]["number"])
     return "Success"
 
 @app.route("/learn/<deck>/<level>/save", methods=['POST'])

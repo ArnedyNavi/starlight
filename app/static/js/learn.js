@@ -333,7 +333,7 @@ function initUnitQuiz() {
     }
 
     let answers;
-    console.log(document.getElementsByClassName('btn-option-quiz')[0]);
+    
     if (type_random.a == 'hanzi' || type_random.a == 'pinyin') {
         document.getElementById('options-quiz').className = 'row row-cols-lg-2 row-cols-1 text-center d-flex flex-row align-items-center';
         if (type_random.a == 'hanzi') {

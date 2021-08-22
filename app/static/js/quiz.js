@@ -398,7 +398,6 @@ function saveAnswer(part, total_numbers) {
         }
     }
     answers.push(answers_part);
-    console.log(answers);
 }
 
 function confirmPopUp() {
