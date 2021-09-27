@@ -18,7 +18,7 @@ app.secret_key = "akldj92ey2dkwbdkagswu19"
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 # Connect with Database
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://zoihfvvpxkhvvf:95a34e36e017da1e96e0a6e011d95fbca597a148c1fe760dfda5d5a2c05946f5@ec2-34-233-192-238.compute-1.amazonaws.com:5432/d4u5mqi2bjl6k1"
+app.config['SQLALCHEMY_DATABASE_URI'] = ""
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
